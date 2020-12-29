@@ -13,7 +13,7 @@ class DM:
     def return_all_properties(self, doc_id, version_label = 'max', library  = 'FY19_ALL_STAFF'):
         
         pDocObject =  win32.gencache.EnsureDispatch('PCDClient.PCDDocObject') 
-        pDocObject.SetDST(dm.dst)
+        pDocObject.SetDST(self.dst)
         pDocObject.SetObjectType("SEARCH")
         pDocObject.SetProperty("%TARGET_LIBRARY", library)
         pDocObject.SetProperty("%OBJECT_IDENTIFIER", doc_id)
@@ -110,7 +110,6 @@ class DM:
         bytesRead = 1;
         file_to_write = open(download_filename, 'wb')        
         while bytesRead != 0:
-            print ('here!')
             stream = objGetStream.Read(fileSize, bytesRead)
             bytes_to_write = stream[0]
             if (bytesRead != 0):
