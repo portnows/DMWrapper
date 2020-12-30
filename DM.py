@@ -117,6 +117,41 @@ class DM:
             bytesRead = stream[1]
         file_to_write.close()
         
+    def add_to_folder(self, folder_num, folder_version_id, doc_num, library = 'FY19_ALL_STAFF'):
+        
+        dmDoc.SetDST(self.dst)
+        dmDoc.SetProperty("%TARGET_LIBRARY", library)
+        dmDoc.SetObjectType("ContentItem")
+        dmDoc.SetProperty("PARENT", folder_num)
+        dmDoc.SetProperty("PARENT_VERSION", folder_version_id)
+        dmDoc.SetProperty("DOCNUMBER", doc_num)
+        dmDoc.SetProperty("VERSION_TYPE", "R")
+        dmDoc.Create()
+        
+        
+    def create_folder(self, profile_info):
+  
+        dmDoc = win32.gencache.EnsureDispatch('PCDClient.PCDDocObject')  
+        dmDoc.SetDST(self.dst)
+        dmDoc.SetObjectType(profile_info['formType'])
+        dmDoc.SetProperty("%TARGET_LIBRARY", profile_info['Library'])
+        dmDoc.SetProperty("DOCNAME", profile_info['FolderName'])
+        dmDoc.SetProperty("AUTHOR_ID", profile_info['Author'])
+        dmDoc.SetProperty("TYPE_ID", "FOLDER")
+        dmDoc.SetProperty("TYPIST_ID",  profile_info['Author'])
+        dmDoc.SetProperty("STORAGE", "ARCHIVE")
+        dmDoc.SetProperty("JOB_CODE", profile_info['JobCode'])
+        dmDoc.SetProperty("ORG_ID", profile_info['Agency'])
+        dmDoc.SetProperty("GOAL_ID", profile_info['Goal'])
+        dmDoc.SetProperty("APP_ID", "folder")
+        dmDoc.Create()
+        
+        documentNumber = str(dmDoc.GetReturnProperty("%OBJECT_IDENTIFIER"))
+        versionID = str(dmDoc.GetReturnProperty("%VERSION_ID"))    
+        
+
+        return documentNumber, versionID    
+        
     def create_profile(self, profile_info):
         
         doc = win32.gencache.EnsureDispatch('PCDClient.PCDDocObject')  
